@@ -1,4 +1,4 @@
-package pt.oficinadosnumeros.api;
+package pt.oficinadosnumeros.api.controller;
 
 import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Controller;
