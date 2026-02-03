@@ -1,4 +1,4 @@
-package pt.oficinasdosnumeros;
+package pt.oficinadosnumeros;
 
 import io.micronaut.runtime.Micronaut;
 

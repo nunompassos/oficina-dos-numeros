@@ -5,7 +5,7 @@ plugins {
 }
 
 version = "0.1"
-group = "pt.oficinasdosnumeros"
+group = "pt.oficinadosnumeros"
 
 repositories {
     mavenCentral()
@@ -26,7 +26,7 @@ dependencies {
 
 
 application {
-    mainClass = "pt.oficinasdosnumeros.Application"
+    mainClass = "pt.oficinadosnumeros.Application"
 }
 java {
     sourceCompatibility = JavaVersion.toVersion("25")
@@ -41,7 +41,7 @@ micronaut {
     testRuntime("junit5")
     processing {
         incremental(true)
-        annotations("pt.oficinasdosnumeros.*")
+        annotations("pt.oficinadosnumeros.*")
     }
     aot {
         // Please review carefully the optimizations enabled below

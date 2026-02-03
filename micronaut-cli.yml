@@ -1,5 +1,5 @@
 applicationType: default
-defaultPackage: pt.oficinasdosnumeros
+defaultPackage: pt.oficinadosnumeros
 testFramework: junit
 sourceLanguage: java
 buildTool: gradle
