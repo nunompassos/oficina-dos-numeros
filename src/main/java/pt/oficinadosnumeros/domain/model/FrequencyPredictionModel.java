@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import jakarta.inject.Singleton;
+
+@Singleton
 public class FrequencyPredictionModel implements PredictionModel {
 
     private static final int NUMBERS_COUNT = 5;
