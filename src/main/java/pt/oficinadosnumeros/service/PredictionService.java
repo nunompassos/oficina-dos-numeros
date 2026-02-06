@@ -1,14 +1,15 @@
 package pt.oficinadosnumeros.service;
 
-import jakarta.inject.Singleton;
-import pt.oficinadosnumeros.domain.model.PredictionContext;
-import pt.oficinadosnumeros.domain.model.PredictionModel;
-import pt.oficinadosnumeros.domain.model.PredictionResult;
-
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import jakarta.inject.Singleton;
+import pt.oficinadosnumeros.domain.exception.PredictionModelNotFoundException;
+import pt.oficinadosnumeros.domain.model.PredictionContext;
+import pt.oficinadosnumeros.domain.model.PredictionModel;
+import pt.oficinadosnumeros.domain.model.PredictionResult;
 
 @Singleton
 public class PredictionService {
@@ -37,7 +38,7 @@ public class PredictionService {
         PredictionModel model = models.get(modelId);
 
         if (model == null) {
-            throw new IllegalArgumentException("Prediction model not found: " + modelId);
+            throw new PredictionModelNotFoundException(modelId);
         }
 
         return model.predict(context);
