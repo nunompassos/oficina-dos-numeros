@@ -22,8 +22,13 @@ dependencies {
     runtimeOnly("ch.qos.logback:logback-classic")
     testImplementation("io.micronaut:micronaut-http-client")
     testRuntimeOnly("org.junit.platform:junit-platform-launcher")
-}
+    testImplementation("org.junit.jupiter:junit-jupiter-api")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine")
+    testImplementation("org.mockito:mockito-core:5.11.0")
+    testImplementation("io.micronaut.test:micronaut-test-junit5")
+    testImplementation("io.micronaut:micronaut-http-client")
 
+}
 
 application {
     mainClass = "pt.oficinadosnumeros.Application"
@@ -32,7 +37,6 @@ java {
     sourceCompatibility = JavaVersion.toVersion("25")
     targetCompatibility = JavaVersion.toVersion("25")
 }
-
 
 graalvmNative.toolchainDetection = false
 
@@ -57,9 +61,16 @@ micronaut {
     }
 }
 
-
 tasks.named("dockerfileNative") {
     jdkVersion = "25"
 }
 
+test {
+    useJUnitPlatform()
+}
+
+tasks.register("integrationTest", Test) {
+    useJUnitPlatform()
+    include("**/*IntegrationTest.class")
+}
 
