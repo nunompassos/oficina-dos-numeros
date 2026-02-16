@@ -2,33 +2,36 @@ package pt.oficinadosnumeros.api.error;
 
 import io.micronaut.http.HttpRequest;
 import io.micronaut.http.HttpResponse;
+import io.micronaut.http.MediaType;
 import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
-import pt.oficinadosnumeros.api.dto.ErrorResponse;
+import pt.oficinadosnumeros.api.problem.ProblemDetail;
 import pt.oficinadosnumeros.domain.exception.PredictionModelNotFoundException;
 
-import java.time.Instant;
-
-@Produces
+@Produces(MediaType.APPLICATION_JSON_PROBLEM)
 @Singleton
 public class PredictionModelNotFoundHandler
-    implements ExceptionHandler<PredictionModelNotFoundException, HttpResponse<ErrorResponse>> {
+    implements ExceptionHandler<PredictionModelNotFoundException, HttpResponse<ProblemDetail>> {
 
     @Override
-    public HttpResponse<ErrorResponse> handle(
+    public HttpResponse<ProblemDetail> handle(
         HttpRequest request,
         PredictionModelNotFoundException exception
     ) {
-        ErrorResponse error = new ErrorResponse(
-            404,
+
+        ProblemDetail problem = new ProblemDetail(
+            "https://oficinadosnumeros.pt/problems/model-not-found",
             "Not Found",
+            404,
             exception.getMessage(),
             request.getPath(),
-            Instant.now(),
             null
         );
 
-        return HttpResponse.notFound(error);
+        return HttpResponse
+            .notFound(problem)
+            .contentType(MediaType.APPLICATION_JSON_PROBLEM);
     }
 }
+

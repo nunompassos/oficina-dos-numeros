@@ -57,7 +57,7 @@ class PredictionControllerIntegrationTest {
     @Test
     void shouldReturn404WhenModelDoesNotExist() {
 
-        String body = """
+        var body = """
             {
               "modelId": "invalid-model",
               "historicalDraws": [
@@ -75,9 +75,14 @@ class PredictionControllerIntegrationTest {
                 client.toBlocking().exchange(request, String.class)
             );
 
+        var responseBody = exception.getResponse().getBody(String.class).orElse("");
+        System.out.println(responseBody);
+
         assertEquals(HttpStatus.NOT_FOUND, exception.getStatus());
-        assertTrue(exception.getResponse().getBody(String.class).orElse("")
-                       .contains("Prediction model not found"));
+        assertTrue(responseBody.contains("Prediction model not found"));
+        assertEquals("application/problem+json", exception.getResponse().getHeaders().getContentType().orElse(""));
+        assertTrue(responseBody.contains("model-not-found"));
+        assertFalse(responseBody.contains("errors"));
     }
 
     // -----------------------------
@@ -102,8 +107,12 @@ class PredictionControllerIntegrationTest {
                 client.toBlocking().exchange(request, String.class)
             );
 
+        var responseBody = exception.getResponse().getBody(String.class).orElse("");
+
         assertEquals(HttpStatus.BAD_REQUEST, exception.getStatus());
-        assertTrue(exception.getResponse().getBody(String.class).orElse("")
-                       .contains("Validation failed"));
+        assertTrue(responseBody.contains("Validation failed"));
+        assertEquals("application/problem+json", exception.getResponse().getHeaders().getContentType().orElse(""));
+        assertTrue(responseBody.contains("validation-error"));
+        assertTrue(responseBody.contains("errors"));
     }
 }
