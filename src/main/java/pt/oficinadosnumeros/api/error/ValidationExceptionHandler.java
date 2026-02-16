@@ -10,6 +10,7 @@ import io.micronaut.validation.exceptions.ConstraintExceptionHandler;
 import jakarta.inject.Singleton;
 import jakarta.validation.ConstraintViolationException;
 import pt.oficinadosnumeros.api.problem.ProblemDetail;
+import pt.oficinadosnumeros.api.problem.ProblemType;
 import pt.oficinadosnumeros.api.problem.Violation;
 
 @Produces(MediaType.APPLICATION_JSON_PROBLEM)
@@ -24,6 +25,8 @@ public class ValidationExceptionHandler
         ConstraintViolationException exception
     ) {
 
+        var problemType = ProblemType.VALIDATION_ERROR;
+
         var violations = exception.getConstraintViolations()
             .stream()
             .map(v -> new Violation(
@@ -32,12 +35,15 @@ public class ValidationExceptionHandler
             ))
             .toList();
 
+        var correlationId = request.getAttribute("correlationId", String.class).orElse("N/A");
+
         ProblemDetail problem = new ProblemDetail(
-            "https://oficinadosnumeros.pt/problems/validation-error",
-            "Bad Request",
-            400,
+            problemType.getTypeUri(),
+            problemType.getTitle(),
+            problemType.getStatus(),
             "Validation failed",
             request.getPath(),
+            correlationId,
             violations
         );
 

@@ -11,5 +11,6 @@ public record ProblemDetail(
     int status,
     String detail,
     String instance,
+    String correlationId,
     List<Violation> errors
 ) {}

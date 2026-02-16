@@ -7,6 +7,7 @@ import io.micronaut.http.annotation.Produces;
 import io.micronaut.http.server.exceptions.ExceptionHandler;
 import jakarta.inject.Singleton;
 import pt.oficinadosnumeros.api.problem.ProblemDetail;
+import pt.oficinadosnumeros.api.problem.ProblemType;
 import pt.oficinadosnumeros.domain.exception.PredictionModelNotFoundException;
 
 @Produces(MediaType.APPLICATION_JSON_PROBLEM)
@@ -20,12 +21,17 @@ public class PredictionModelNotFoundHandler
         PredictionModelNotFoundException exception
     ) {
 
+        var problemType = ProblemType.MODEL_NOT_FOUND;
+
+        var correlationId = request.getAttribute("correlationId", String.class).orElse("N/A");
+
         ProblemDetail problem = new ProblemDetail(
-            "https://oficinadosnumeros.pt/problems/model-not-found",
-            "Not Found",
-            404,
+            problemType.getTypeUri(),
+            problemType.getTitle(),
+            problemType.getStatus(),
             exception.getMessage(),
             request.getPath(),
+            correlationId,
             null
         );
 
